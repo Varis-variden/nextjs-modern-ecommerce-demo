@@ -160,7 +160,7 @@ export async function calculatePromotions(
   const bundlePromos = activePromotions.filter((p) => p.type === 'bundle');
   for (const promo of bundlePromos) {
     const bundleProductIds = (promo.rewards.bundleProductIds || []).map(
-      (id: any) => id.toString()
+      (id: any) => (id._id || id).toString()
     );
 
     if (bundleProductIds.length === 0) continue;

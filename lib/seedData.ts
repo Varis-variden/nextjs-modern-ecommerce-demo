@@ -236,8 +236,8 @@ export const seedProducts: SeedProduct[] = [
       th: 'เซ็ตผิวเปล่งประกาย',
     },
     description: {
-      en: 'The complete evening ritual, curated for those who refuse to compromise. This limited-edition set pairs the Botanical Radiance Serum, the Golden Orchid Night Cream, and the Lemongrass Purifying Cleanser — three best-loved formulations united in an elegant keepsake box. A saving of ฿1,640 and the perfect introduction to the SIRIN philosophy.',
-      th: 'พิธีกรรมบำรุงผิวยามค่ำอันสมบูรณ์แบบ คัดสรรเพื่อผู้ที่ไม่ยอมประนีประนอม เซ็ตลิมิเต็ดอิดิชั่นรวม เซรั่มผิวเปล่งประกาย ครีมกลางคืนกล้วยไม้ทอง และ คลีนเซอร์ตะไคร้ — สามสูตรยอดนิยมในกล่องของขวัญหรูหรา ประหยัด ฿1,640 และเป็นจุดเริ่มต้นที่สมบูรณ์แบบสู่ปรัชญา SIRIN',
+      en: 'The complete evening ritual, curated for those who refuse to compromise. This limited-edition set pairs the Botanical Radiance Serum, the Golden Orchid Night Cream, and the Lemongrass Purifying Cleanser — three best-loved formulations united in an elegant keepsake box. A saving of ฿1,240 and the perfect introduction to the SIRIN philosophy.',
+      th: 'พิธีกรรมบำรุงผิวยามค่ำอันสมบูรณ์แบบ คัดสรรเพื่อผู้ที่ไม่ยอมประนีประนอม เซ็ตลิมิเต็ดอิดิชั่นรวม เซรั่มผิวเปล่งประกาย ครีมกลางคืนกล้วยไม้ทอง และ คลีนเซอร์ตะไคร้ — สามสูตรยอดนิยมในกล่องของขวัญหรูหรา ประหยัด ฿1,240 และเป็นจุดเริ่มต้นที่สมบูรณ์แบบสู่ปรัชญา SIRIN',
     },
     ingredients: {
       en: 'Includes: Botanical Radiance Serum (30ml), Golden Orchid Night Cream (30ml), Lemongrass Purifying Cleanser (120ml)',
@@ -245,7 +245,7 @@ export const seedProducts: SeedProduct[] = [
     },
     category: 'sets',
     price: 3990,
-    originalPrice: 5630,
+    originalPrice: 5230,
     images: [`${UNSPLASH_BASE}photo-1571781926291-c477ebfd024b?w=600&h=750&fit=crop`],
     sizes: [],
     tags: ['limited'],
@@ -390,8 +390,8 @@ export function buildPromotions(products: InsertedProduct[]) {
       slug: 'radiance-ritual-bundle',
       type: 'bundle' as const,
       name: {
-        en: 'Radiance Ritual Set — Save ฿1,640',
-        th: 'เซ็ตผิวเปล่งประกาย — ประหยัด ฿1,640',
+        en: 'Radiance Ritual Set — Save ฿1,240',
+        th: 'เซ็ตผิวเปล่งประกาย — ประหยัด ฿1,240',
       },
       description: {
         en: 'Get the Botanical Radiance Serum, Golden Orchid Night Cream, and Lemongrass Cleanser together for just ฿3,990.',

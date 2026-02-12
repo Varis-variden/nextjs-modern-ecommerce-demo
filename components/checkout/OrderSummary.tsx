@@ -93,8 +93,8 @@ export function OrderSummary({ onPlaceOrder, selectedAddressId, isPlacing, payme
             </div>
 
             {/* Applied promotions */}
-            {appliedPromotions.map((promo) => (
-              <div key={promo.promoId} className="flex justify-between text-sm">
+            {appliedPromotions.map((promo, idx) => (
+              <div key={`${promo.promoId}-${idx}`} className="flex justify-between text-sm">
                 <span className="text-emerald-600 flex items-center gap-1">
                   <Tag className="w-3 h-3" />
                   {promo.label[lang]}

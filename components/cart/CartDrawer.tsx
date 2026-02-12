@@ -154,9 +154,9 @@ export function CartDrawer() {
                         {/* Promo tags on item */}
                         {itemPromos.length > 0 && (
                           <div className="flex flex-wrap gap-1 mt-1">
-                            {itemPromos.map((p) => (
+                            {itemPromos.map((p, idx) => (
                               <span
-                                key={p.promoId}
+                                key={`${p.promoId}-${idx}`}
                                 className="text-[9px] tracking-wider uppercase bg-emerald-50 text-emerald-700 px-1.5 py-0.5 rounded-sm"
                               >
                                 {p.label[lang]}
