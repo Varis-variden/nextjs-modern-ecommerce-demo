@@ -90,7 +90,10 @@ export default function PromotionsPage() {
   useEffect(() => {
     fetch('/api/promotions')
       .then((r) => r.json())
-      .then((data) => setPromotions(data.data || data))
+      .then((data) => {
+        const promos = data.data || data;
+        if (Array.isArray(promos)) setPromotions(promos);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);

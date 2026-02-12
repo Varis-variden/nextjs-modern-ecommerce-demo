@@ -53,7 +53,8 @@ function ProductsContent() {
     fetch('/api/products')
       .then((r) => r.json())
       .then((data) => {
-        setProducts(data.data || data);
+        const products = data.data || data;
+        if (Array.isArray(products)) setProducts(products);
         setIsLoaded(true);
       })
       .catch(() => setIsLoaded(true));
