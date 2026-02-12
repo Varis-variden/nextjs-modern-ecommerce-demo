@@ -39,6 +39,12 @@ export function Header() {
               >
                 {t.nav.products}
               </Link>
+              <Link
+                href="/promotions"
+                className="text-xs tracking-[0.2em] uppercase text-stone-600 hover:text-stone-900 font-medium"
+              >
+                {t.nav.promotions}
+              </Link>
             </nav>
 
             {/* Mobile menu button */}

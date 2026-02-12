@@ -15,6 +15,7 @@ export function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const links = [
     { href: '/', label: t.nav.home },
     { href: '/products', label: t.nav.products },
+    { href: '/promotions', label: t.nav.promotions },
     { href: '/products?category=face', label: t.nav.face },
     { href: '/products?category=body', label: t.nav.body },
     { href: '/products?category=hair', label: t.nav.hair },

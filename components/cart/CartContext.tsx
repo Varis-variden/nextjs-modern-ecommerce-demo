@@ -99,6 +99,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ productId, size, qty }),
       });
+      if (!res.ok) return;
       const data = await res.json();
       const cart = data.data || data;
       setItems(cart.items || []);

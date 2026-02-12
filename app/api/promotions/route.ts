@@ -24,6 +24,7 @@ export async function GET() {
         { startDate: { $lte: now } },
       ],
     })
+      .populate('conditions.productIds', 'name images slug price')
       .populate('rewards.freeProductId', 'name images slug')
       .populate('rewards.bundleProductIds', 'name images slug price')
       .lean();

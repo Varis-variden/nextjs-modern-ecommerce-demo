@@ -77,12 +77,12 @@ export async function POST(request: Request) {
       );
     }
 
-    if (!size || typeof size !== 'string') {
+    if (typeof size !== 'string') {
       return NextResponse.json(
         {
           error: {
             code: 'INVALID_SIZE',
-            message: 'size is required and must be a string',
+            message: 'size must be a string',
           },
         },
         { status: 400 }

@@ -69,7 +69,7 @@ export const seedProducts: SeedProduct[] = [
     },
     category: 'face',
     price: 2450,
-    images: [`${UNSPLASH_BASE}photo-1570194065650-d99fb4a38691?w=600&h=750&fit=crop`],
+    images: [`${UNSPLASH_BASE}photo-1611930022073-b7a4ba5fcccd?w=600&h=750&fit=crop`],
     sizes: ['30ml', '50ml'],
     tags: ['new'],
     stock: 100,
