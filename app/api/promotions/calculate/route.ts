@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { connectDB } from '@/lib/mongodb';
 import Cart from '@/models/Cart';
+import '@/models/Product'; // register model for populate
+import '@/models/Promotion'; // used by promotion engine
 import { calculatePromotions } from '@/lib/promotionEngine';
 import type { CartForCalculation, CartItemForCalculation } from '@/types';
 

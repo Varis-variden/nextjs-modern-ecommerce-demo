@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { connectDB } from '@/lib/mongodb';
 import Promotion from '@/models/Promotion';
+import '@/models/Product'; // register model for populate
 
 /**
  * GET /api/promotions
