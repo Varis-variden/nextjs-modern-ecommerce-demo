@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useRef,
   ReactNode,
 } from 'react';
 import type { Product, PromotionResult } from '@/types';
@@ -52,11 +53,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [couponCode, setCouponCode] = useState<string | null>(null);
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
 
+  // Track write operations so initial fetchCart doesn't overwrite fresher state
+  const writeVersion = useRef(0);
+
   const fetchCart = useCallback(async () => {
+    const versionAtStart = writeVersion.current;
     try {
       const res = await fetch('/api/cart');
       const data = await res.json();
       const cart = data.data || data;
+      // Skip if a write operation (addItem, removeItem, etc.) happened during fetch
+      if (writeVersion.current !== versionAtStart) return;
       setItems(cart.items || []);
       setCouponCode(cart.couponCode || null);
       setSelectedAddressId(cart.selectedAddressId || null);
@@ -92,6 +99,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, [items, recalculatePromos]);
 
   const addItem = useCallback(async (productId: string, size: string, qty: number) => {
+    writeVersion.current++;
     setIsLoading(true);
     try {
       const res = await fetch('/api/cart', {
@@ -110,6 +118,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const removeItem = useCallback(async (itemId: string) => {
+    writeVersion.current++;
     setIsLoading(true);
     try {
       const res = await fetch(`/api/cart/items/${itemId}`, { method: 'DELETE' });
@@ -122,6 +131,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateQty = useCallback(async (itemId: string, qty: number) => {
+    writeVersion.current++;
     setIsLoading(true);
     try {
       const res = await fetch(`/api/cart/items/${itemId}`, {
@@ -181,6 +191,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const clearCart = useCallback(async () => {
+    writeVersion.current++;
     setIsLoading(true);
     try {
       await fetch('/api/cart', { method: 'DELETE' });
