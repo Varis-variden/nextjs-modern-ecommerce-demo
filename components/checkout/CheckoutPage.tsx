@@ -34,8 +34,9 @@ export function CheckoutPage() {
   const [mounted, setMounted] = useState(false);
   const clearedRef = useRef(false);
 
-  // Redirect if empty cart (after mount to avoid SSR mismatch)
+  // Scroll to top and mark mounted (avoid SSR mismatch)
   useEffect(() => {
+    window.scrollTo({ top: 0 });
     setMounted(true);
   }, []);
 
