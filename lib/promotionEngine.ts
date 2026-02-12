@@ -33,23 +33,35 @@ export async function calculatePromotions(
   let totalDiscount = 0;
   let freeShippingFromCoupon = false;
 
-  // Get all active promotions
+  // Get all active promotions (filter dates and usage in MongoDB)
   const now = new Date();
-  const promotions = await Promotion.find({
+  const activePromotions = await Promotion.find({
     isActive: true,
     $or: [
       { startDate: { $exists: false } },
       { startDate: null },
       { startDate: { $lte: now } },
     ],
-  }).populate('rewards.freeProductId conditions.tiers.giftProductId rewards.bundleProductIds');
+    $and: [
+      { $or: [{ endDate: { $exists: false } }, { endDate: null }, { endDate: { $gte: now } }] },
+      { $or: [{ maxUsage: { $exists: false } }, { maxUsage: null }, { $expr: { $lt: ['$usageCount', '$maxUsage'] } }] },
+    ],
+  })
+    .populate('rewards.bundleProductIds')
+    .lean();
 
-  // Also filter by endDate
-  const activePromotions = promotions.filter((promo) => {
-    if (promo.endDate && new Date(promo.endDate) < now) return false;
-    if (promo.maxUsage && promo.usageCount >= promo.maxUsage) return false;
-    return true;
-  });
+  // Batch-load all gift products in one query (avoid N+1)
+  const giftProductIds = new Set<string>();
+  for (const promo of activePromotions) {
+    if (promo.rewards.freeProductId) giftProductIds.add(promo.rewards.freeProductId.toString());
+    for (const tier of promo.conditions.tiers || []) {
+      if (tier.giftProductId) giftProductIds.add(tier.giftProductId.toString());
+    }
+  }
+  const giftProducts = giftProductIds.size > 0
+    ? await Product.find({ _id: { $in: [...giftProductIds] } }).select('_id name images').lean()
+    : [];
+  const giftMap = new Map(giftProducts.map(p => [p._id.toString(), p]));
 
   // ─── 1. BOGO (Buy One Get One) ────────────────────────────
 
@@ -99,7 +111,7 @@ export async function calculatePromotions(
       );
 
       if (allPresent && promo.rewards.freeProductId) {
-        const giftProduct = await Product.findById(promo.rewards.freeProductId);
+        const giftProduct = giftMap.get(promo.rewards.freeProductId.toString());
         if (giftProduct) {
           freeGifts.push({
             productId: giftProduct._id.toString(),
@@ -114,7 +126,7 @@ export async function calculatePromotions(
             label: promo.name as BilingualText,
             discountAmount: 0,
             affectedItems: promoProductIds,
-            details: `Free ${giftProduct.name.en}`,
+            details: `Free ${(giftProduct.name as BilingualText).en}`,
           });
         }
       }
@@ -129,7 +141,7 @@ export async function calculatePromotions(
         .reduce((sum, item) => sum + item.qty, 0);
 
       if (categoryItemCount >= (promo.conditions.minQty || 1) && promo.rewards.freeProductId) {
-        const giftProduct = await Product.findById(promo.rewards.freeProductId);
+        const giftProduct = giftMap.get(promo.rewards.freeProductId.toString());
         if (giftProduct) {
           freeGifts.push({
             productId: giftProduct._id.toString(),
@@ -148,7 +160,7 @@ export async function calculatePromotions(
                 promoCategoryIds.includes(item.product.category)
               )
               .map((item) => item.productId),
-            details: `Free ${giftProduct.name.en}`,
+            details: `Free ${(giftProduct.name as BilingualText).en}`,
           });
         }
       }
@@ -267,7 +279,7 @@ export async function calculatePromotions(
     const bestTier = matchingTiers[matchingTiers.length - 1];
 
     if (bestTier && bestTier.giftProductId) {
-      const giftProduct = await Product.findById(bestTier.giftProductId);
+      const giftProduct = giftMap.get(bestTier.giftProductId.toString());
       if (giftProduct) {
         freeGifts.push({
           productId: giftProduct._id.toString(),
@@ -282,7 +294,7 @@ export async function calculatePromotions(
           label: promo.name as BilingualText,
           discountAmount: 0,
           affectedItems: cart.items.map((i) => i.productId),
-          details: `Free ${giftProduct.name.en}`,
+          details: `Free ${(giftProduct.name as BilingualText).en}`,
         });
       }
     }

@@ -91,5 +91,7 @@ const PromotionSchema = new Schema<IPromotion>({
   maxUsage: Number,
 });
 
+PromotionSchema.index({ isActive: 1, startDate: 1, endDate: 1 });
+
 export default mongoose.models.Promotion ||
   mongoose.model<IPromotion>('Promotion', PromotionSchema);

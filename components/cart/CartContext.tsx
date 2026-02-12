@@ -90,12 +90,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     fetchCart();
   }, [fetchCart]);
 
+  const recalcTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   useEffect(() => {
     if (items.length > 0) {
-      recalculatePromos();
+      if (recalcTimerRef.current) clearTimeout(recalcTimerRef.current);
+      recalcTimerRef.current = setTimeout(() => recalculatePromos(), 300);
     } else {
       setPromoResult(null);
     }
+    return () => { if (recalcTimerRef.current) clearTimeout(recalcTimerRef.current); };
   }, [items, recalculatePromos]);
 
   const addItem = useCallback(async (productId: string, size: string, qty: number) => {
