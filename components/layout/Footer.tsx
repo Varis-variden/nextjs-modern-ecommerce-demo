@@ -123,7 +123,7 @@ export function Footer() {
               {t.footer.contactUs}
             </h3>
             <p className="text-sm text-stone-400 mb-1">
-              {t.footer.email}: hello@sirin.co.th
+              {t.footer.email}: hello@varidentech.com
             </p>
             <p className="text-sm text-stone-400 mb-6">
               Bangkok, Thailand
